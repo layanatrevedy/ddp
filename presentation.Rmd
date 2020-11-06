@@ -1,0 +1,73 @@
+---
+title: "US Population per state"
+author: "Layana Trevedy"
+date: "November  7, 2020"
+output: ioslides_presentation
+---
+## Presentation 
+Through this code we try to plot the Population in USA per state. We write a server and UI file in R.
+The code can be found at [https://github.com/layanatrevedy/ddp](https://github.com/layanatrevedy/ddp)
+
+
+## Server
+
+This is the code for the server file. It fills the population variable from the data file (csv)
+```
+
+library(shiny)
+
+# Load Data
+
+population <- read.csv("./usPopulation.csv")
+
+# This is our shiny server
+function(input, output) { 
+  
+  output$number_of_people <- renderPlot({ 
+    
+    # Plotting a barplot 
+    barplot(population[,input$State],  
+            main=input$State, 
+            ylab="Count of People", 
+            xlab="Year") 
+  })
+}
+
+```
+
+## UI
+This is the code for the UI which accepts data from the server while passing it inputs from a select input.
+
+```
+library(shiny)
+
+
+# Loading the data about mexican population state wise in USA
+
+population <- read.csv("./usPopulation.csv")
+
+
+fluidPage(     
+  
+  # Give the page a title 
+  titlePanel("Population per state"), 
+  
+  sidebarLayout(       
+    
+    
+    # A sidebar for input 
+    sidebarPanel(selectInput("State", "State:",  
+                             choices=colnames(population)), 
+                 hr(), 
+    ), 
+    
+    mainPanel( 
+      plotOutput("number_of_people")   
+    ) 
+    
+  ) 
+) 
+```
+
+## Conclusion
+We can use the [shiny app](https://layanatrevedy.shinyapps.io/populationApp/) to view this in action!
